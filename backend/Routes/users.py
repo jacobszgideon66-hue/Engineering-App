@@ -8,8 +8,12 @@ from database import get_db
 router = APIRouter(prefix="/users", tags=["users"])
 
 @router.post("/register", response_model=schemas.User, status_code=201)
-async def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    """Register a new user."""
+async def register_user(
+    user: schemas.UserCreate, 
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_admin_user)
+):
+    """Register a new user (Admin only)."""
     db_user = auth.get_user(db, username=user.username)
     if db_user:
         raise HTTPException(
@@ -21,6 +25,7 @@ async def register_user(user: schemas.UserCreate, db: Session = Depends(get_db))
         username=user.username,
         full_name=user.full_name,
         role=user.role,
+        department=user.department,
         hashed_password=hashed_password,
         is_active=user.is_active
     )
@@ -43,7 +48,18 @@ async def login(form_data: schemas.UserLogin, db: Session = Depends(get_db)):
     access_token = auth.create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {
+        "access_token": access_token, 
+        "token_type": "bearer",
+        "user": {
+            "id": user.id,
+            "username": user.username,
+            "full_name": user.full_name,
+            "role": user.role,
+            "department": user.department,
+            "is_active": user.is_active
+        }
+    }
 
 @router.get("/me", response_model=schemas.User)
 async def get_current_user_info(current_user: models.User = Depends(auth.get_current_active_user)):

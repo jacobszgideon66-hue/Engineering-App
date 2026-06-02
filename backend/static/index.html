@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#1a3a52">
-    <title>Engineering & Mining App</title>
+    <title>Engineering & Mining App - Department Login</title>
     <style>
         * {
             margin: 0;
@@ -19,18 +19,45 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            flex-direction: column;
+            padding: 0;
+            margin: 0;
             color: #333;
+            overflow-x: hidden;
         }
         
-        .container {
+        .app-container {
+            width: 100%;
+            height: 100vh;
+            max-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            overflow: hidden;
+        }
+        
+        /* === LOGIN PAGE === */
+        .login-page {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .login-page.active {
+            display: flex;
+        }
+        
+        .login-card {
             background: white;
             border-radius: 16px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             width: 100%;
-            max-width: 500px;
+            max-width: 400px;
             padding: 40px;
             animation: slideUp 0.5s ease;
         }
@@ -46,50 +73,177 @@
             }
         }
         
-        .header {
+        .login-header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
         
-        .logo {
+        .login-logo {
             font-size: 48px;
             margin-bottom: 10px;
         }
         
-        h1 {
+        .login-title {
             color: #1a3a52;
             font-size: 28px;
-            margin-bottom: 10px;
             font-weight: 700;
+            margin-bottom: 8px;
         }
         
-        .subtitle {
+        .login-subtitle {
             color: #666;
             font-size: 14px;
-            margin-bottom: 30px;
         }
         
-        .status-badge {
-            display: inline-block;
-            background: #10b981;
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #1a3a52;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
+            margin-top: 10px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .error-message {
+            background: #fee;
+            color: #dc2626;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        /* === MAIN APP === */
+        .app-main {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+        }
+        
+        .app-main.active {
+            display: flex;
+        }
+        
+        .app-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .header-left {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .header-logo {
+            font-size: 32px;
+        }
+        
+        .header-info h2 {
+            font-size: 18px;
+            margin-bottom: 2px;
+        }
+        
+        .header-info p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .header-user {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            font-size: 12px;
+        }
+        
+        .btn-logout {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 14px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 6px;
+            cursor: pointer;
             font-size: 12px;
             font-weight: 600;
-            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-logout:hover {
+            background: rgba(255,255,255,0.3);
         }
         
         .nav-tabs {
             display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
+            gap: 0;
+            background: white;
             border-bottom: 2px solid #e5e7eb;
             overflow-x: auto;
+            flex: 0 0 auto;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         
         .nav-tab {
-            padding: 12px 16px;
+            padding: 14px 20px;
             border: none;
             background: none;
             cursor: pointer;
@@ -99,30 +253,149 @@
             border-bottom: 3px solid transparent;
             transition: all 0.3s ease;
             font-size: 14px;
+            flex: 1;
+            min-width: 100px;
         }
         
         .nav-tab:hover {
             color: #667eea;
+            background: #f9fafb;
         }
         
         .nav-tab.active {
             color: #667eea;
             border-bottom-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
         
         .section {
             display: none;
+            padding: 30px 20px;
+            flex: 1;
+            overflow-y: auto;
         }
         
         .section.active {
             display: block;
         }
         
+        .section-title {
+            color: #1a3a52;
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .section-desc {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .form-container {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 500px;
+            margin-bottom: 20px;
+        }
+        
+        .status-box {
+            background: #f0fdf4;
+            border-left: 4px solid #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .status-box.success {
+            background: #f0fdf4;
+            border-left-color: #10b981;
+        }
+        
+        .status-box.error {
+            background: #fee;
+            border-left-color: #dc2626;
+            color: #dc2626;
+        }
+        
+        .status-box.info {
+            background: #f0f9ff;
+            border-left-color: #3b82f6;
+        }
+        
+        .users-list {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .user-item:last-child {
+            border-bottom: none;
+        }
+        
+        .user-info {
+            flex: 1;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: #1a3a52;
+            margin-bottom: 4px;
+        }
+        
+        .user-meta {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .user-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+        
+        .department-badge {
+            background: #10b981;
+        }
+        
+        .role-badge {
+            background: #f59e0b;
+        }
+        
+        .success-message {
+            color: #10b981;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
         .feature-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
         
         .feature-card {
@@ -156,132 +429,6 @@
             font-size: 12px;
         }
         
-        .btn {
-            display: inline-block;
-            width: 100%;
-            padding: 12px 20px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            text-align: center;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-        }
-        
-        .btn-secondary {
-            background: #f0f4ff;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
-        
-        .btn-secondary:hover {
-            background: #667eea;
-            color: white;
-        }
-        
-        .btn-danger {
-            background: #ef4444;
-            color: white;
-        }
-        
-        .btn-danger:hover {
-            background: #dc2626;
-        }
-        
-        .input-group {
-            margin-bottom: 15px;
-        }
-        
-        .input-group label {
-            display: block;
-            font-weight: 600;
-            color: #1a3a52;
-            margin-bottom: 6px;
-            font-size: 14px;
-        }
-        
-        .input-group input,
-        .input-group select,
-        .input-group textarea {
-            width: 100%;
-            padding: 10px 12px;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 14px;
-            font-family: inherit;
-            transition: border-color 0.3s ease;
-        }
-        
-        .input-group input:focus,
-        .input-group select:focus,
-        .input-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        
-        .status-box {
-            background: #f0fdf4;
-            border-left: 4px solid #10b981;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-        
-        .status-box.info {
-            background: #f0f9ff;
-            border-left-color: #3b82f6;
-        }
-        
-        .status-box.warning {
-            background: #fffbeb;
-            border-left-color: #f59e0b;
-        }
-        
-        .error-message {
-            color: #dc2626;
-            font-size: 12px;
-            margin-top: 5px;
-        }
-        
-        .success-message {
-            color: #10b981;
-            font-size: 12px;
-            margin-top: 5px;
-        }
-        
-        .api-doc-link {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 1px solid #e5e7eb;
-        }
-        
-        .api-doc-link a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        
-        .api-doc-link a:hover {
-            text-decoration: underline;
-        }
-        
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -309,190 +456,411 @@
         }
         
         @media (max-width: 480px) {
-            .container {
-                padding: 20px;
+            .login-card {
+                padding: 30px 20px;
             }
             
-            h1 {
-                font-size: 24px;
+            .app-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .header-user {
+                align-self: flex-end;
+            }
+            
+            .nav-tab {
+                padding: 12px 15px;
+                min-width: 80px;
+                font-size: 12px;
+            }
+            
+            .section {
+                padding: 20px 15px;
             }
             
             .feature-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .user-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">🏭</div>
-            <h1>Engineering & Mining</h1>
-            <p class="subtitle">Mobile-First Asset Management System</p>
-            <div class="status-badge">✓ System Online</div>
+    <!-- LOGIN PAGE -->
+    <div class="login-page active">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">🏭</div>
+                <h1 class="login-title">Engineering & Mining</h1>
+                <p class="login-subtitle">Asset Management System</p>
+            </div>
+            
+            <div class="error-message" id="loginError"></div>
+            
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required placeholder="Enter your username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            
+            <div style="text-align: center; margin-top: 20px; color: #999; font-size: 12px;">
+                <p style="margin-bottom: 8px;"><strong>Demo Credentials:</strong></p>
+                <p>Admin: admin / admin123</p>
+                <p>Manager: manager / manager123</p>
+                <p>(Create more users once logged in as admin)</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- MAIN APP -->
+    <div class="app-main">
+        <div class="app-header">
+            <div class="header-left">
+                <div class="header-logo">🏭</div>
+                <div class="header-info">
+                    <h2>Engineering & Mining</h2>
+                    <p id="headerDepartment">Department</p>
+                </div>
+            </div>
+            <div class="header-user">
+                <span>👤 <span id="headerUser">User</span> (<span id="headerRole">Role</span>)</span>
+                <button class="btn-logout" onclick="logout()">Logout</button>
+            </div>
         </div>
         
         <div class="nav-tabs">
             <button class="nav-tab active" onclick="showSection('dashboard')">Dashboard</button>
+            <button class="nav-tab" onclick="showSection('users')" id="usersTab">Users</button>
             <button class="nav-tab" onclick="showSection('features')">Features</button>
-            <button class="nav-tab" onclick="showSection('quick-start')">Quick Start</button>
+            <button class="nav-tab" onclick="showSection('settings')">Settings</button>
         </div>
         
-        <!-- Dashboard Section -->
-        <div id="dashboard" class="section active">
-            <div class="status-box info">
-                <strong>Backend Status:</strong> Connected and Running
-            </div>
-            
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number">6</div>
-                    <div class="stat-label">API Routes</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">∞</div>
-                    <div class="stat-label">Scalable</div>
-                </div>
-            </div>
-            
-            <h2 style="color: #1a3a52; font-size: 18px; margin: 20px 0 15px;">Ready to Integrate</h2>
-            <p style="color: #666; font-size: 14px; margin-bottom: 20px;">This API is fully compatible with iOS and Android applications. All endpoints support CORS headers for seamless mobile integration.</p>
-            
-            <button class="btn btn-primary" onclick="openAPI()">📖 View Full API Documentation</button>
-        </div>
-        
-        <!-- Features Section -->
-        <div id="features" class="section">
-            <h2 style="color: #1a3a52; font-size: 18px; margin-bottom: 20px;">Core Features</h2>
-            
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">👥</div>
-                    <div class="feature-title">User Management</div>
-                    <div class="feature-desc">Role-based access control with secure authentication</div>
+        <div class="content">
+            <!-- DASHBOARD -->
+            <div id="dashboard" class="section active">
+                <h2 class="section-title">Dashboard</h2>
+                <div class="status-box info">
+                    <strong>✓ System Status:</strong> Connected and Running
                 </div>
                 
-                <div class="feature-card">
-                    <div class="feature-icon">📦</div>
-                    <div class="feature-title">Inventory</div>
-                    <div class="feature-desc">Track parts and consumables in real-time</div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">6</div>
+                        <div class="stat-label">API Routes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">38+</div>
+                        <div class="stat-label">Endpoints</div>
+                    </div>
                 </div>
                 
-                <div class="feature-card">
-                    <div class="feature-icon">💼</div>
-                    <div class="feature-title">Quotations</div>
-                    <div class="feature-desc">Create and manage customer quotes</div>
+                <h3 style="color: #1a3a52; font-size: 16px; margin: 20px 0 15px;">Welcome to the System</h3>
+                <p class="section-desc">Your role is <strong id="dashboardRole">User</strong>. You have access to features based on your department and permissions.</p>
+            </div>
+            
+            <!-- USER MANAGEMENT (Admin Only) -->
+            <div id="users" class="section">
+                <h2 class="section-title">User Management</h2>
+                
+                <div class="form-container">
+                    <h3 style="color: #1a3a52; margin-bottom: 15px; font-size: 16px;">Create New User</h3>
+                    
+                    <div class="error-message" id="userError"></div>
+                    <div class="status-box success" id="userSuccess" style="display: none;"></div>
+                    
+                    <form onsubmit="handleCreateUser(event)">
+                        <div class="form-group">
+                            <label for="newUsername">Username</label>
+                            <input type="text" id="newUsername" name="username" required placeholder="Enter username">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="newFullName">Full Name</label>
+                            <input type="text" id="newFullName" name="full_name" required placeholder="Enter full name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="newPassword">Password</label>
+                            <input type="password" id="newPassword" name="password" required placeholder="Enter password">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="newRole">Role</label>
+                            <select id="newRole" name="role" required>
+                                <option value="">Select Role</option>
+                                <option value="admin">Admin</option>
+                                <option value="manager">Manager</option>
+                                <option value="mechanic">Mechanic</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="newDepartment">Department</label>
+                            <select id="newDepartment" name="department" required>
+                                <option value="">Select Department</option>
+                                <option value="Maintenance">Maintenance</option>
+                                <option value="Operations">Operations</option>
+                                <option value="Safety">Safety</option>
+                                <option value="Finance">Finance</option>
+                                <option value="General">General</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Create User</button>
+                    </form>
                 </div>
                 
-                <div class="feature-card">
-                    <div class="feature-icon">📋</div>
-                    <div class="feature-title">Invoices</div>
-                    <div class="feature-desc">Track billing and payment status</div>
+                <h3 style="color: #1a3a52; margin-top: 30px; margin-bottom: 15px; font-size: 16px;">Active Users</h3>
+                <div class="users-list" id="usersList">
+                    <p style="padding: 20px; text-align: center; color: #999;">Loading users...</p>
+                </div>
+            </div>
+            
+            <!-- FEATURES -->
+            <div id="features" class="section">
+                <h2 class="section-title">Core Features</h2>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">👥</div>
+                        <div class="feature-title">User Management</div>
+                        <div class="feature-desc">Role-based access control with secure authentication</div>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">📦</div>
+                        <div class="feature-title">Inventory</div>
+                        <div class="feature-desc">Track parts and consumables in real-time</div>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">💼</div>
+                        <div class="feature-title">Quotations</div>
+                        <div class="feature-desc">Create and manage customer quotes</div>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">📋</div>
+                        <div class="feature-title">Invoices</div>
+                        <div class="feature-desc">Track billing and payment status</div>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🔧</div>
+                        <div class="feature-title">Job Cards</div>
+                        <div class="feature-desc">Manage work orders and task tracking</div>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">📄</div>
+                        <div class="feature-title">Safety Docs</div>
+                        <div class="feature-desc">Document and sign safety reports</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SETTINGS -->
+            <div id="settings" class="section">
+                <h2 class="section-title">Settings</h2>
+                
+                <div class="status-box info">
+                    <strong>API Documentation:</strong>
+                    <p style="margin-top: 8px; font-size: 13px;">Interactive API docs are available at <code>/docs</code></p>
                 </div>
                 
-                <div class="feature-card">
-                    <div class="feature-icon">🔧</div>
-                    <div class="feature-title">Job Cards</div>
-                    <div class="feature-desc">Manage work orders and task tracking</div>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">📄</div>
-                    <div class="feature-title">Safety Docs</div>
-                    <div class="feature-desc">Document and sign safety reports</div>
+                <div style="margin-top: 20px;">
+                    <h3 style="color: #1a3a52; margin-bottom: 15px; font-size: 16px;">System Information</h3>
+                    <div style="background: #f9fafb; padding: 15px; border-radius: 8px; font-size: 13px; line-height: 1.8;">
+                        <p><strong>Version:</strong> 1.0.0</p>
+                        <p><strong>API Base URL:</strong> http://localhost:8000</p>
+                        <p><strong>Token Expiration:</strong> 30 minutes</p>
+                        <p><strong>Authentication:</strong> JWT Bearer Token</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Quick Start Section -->
-        <div id="quick-start" class="section">
-            <h2 style="color: #1a3a52; font-size: 18px; margin-bottom: 20px;">Quick Start</h2>
-            
-            <div class="input-group">
-                <label>1. Register a User</label>
-                <p style="color: #666; font-size: 12px; margin-bottom: 10px;">POST /users/register</p>
-                <pre style="background: #f9fafb; padding: 10px; border-radius: 8px; font-size: 11px; overflow-x: auto;"><code>{
-  "username": "mechanic1",
-  "password": "secure_pass",
-  "full_name": "John Doe",
-  "role": "mechanic"
-}</code></pre>
-            </div>
-            
-            <div class="input-group">
-                <label>2. Get Authentication Token</label>
-                <p style="color: #666; font-size: 12px; margin-bottom: 10px;">POST /users/token</p>
-                <pre style="background: #f9fafb; padding: 10px; border-radius: 8px; font-size: 11px; overflow-x: auto;"><code>{
-  "username": "mechanic1",
-  "password": "secure_pass"
-}</code></pre>
-            </div>
-            
-            <div class="status-box warning">
-                <strong>Mobile Compatibility:</strong> All endpoints support CORS headers. Use the Bearer token in the Authorization header for authenticated requests.
-            </div>
-            
-            <button class="btn btn-primary" onclick="copyCode()" style="margin-top: 20px;">📋 Copy Example Code</button>
-        </div>
-        
-        <div class="api-doc-link">
-            <a href="/docs" target="_blank">View Interactive Swagger Documentation →</a>
-            <br>
-            <a href="/redoc" target="_blank">View ReDoc Documentation →</a>
         </div>
     </div>
     
     <script>
+        const API_BASE = 'http://localhost:8000';
+        let currentUser = null;
+        let authToken = null;
+        
+        // Initialize
+        window.addEventListener('load', () => {
+            const savedToken = localStorage.getItem('authToken');
+            const savedUser = localStorage.getItem('currentUser');
+            
+            if (savedToken && savedUser) {
+                authToken = savedToken;
+                currentUser = JSON.parse(savedUser);
+                showApp();
+                loadUsers();
+            }
+        });
+        
+        async function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch(`${API_BASE}/users/token`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                if (!response.ok) {
+                    const errorDiv = document.getElementById('loginError');
+                    errorDiv.textContent = 'Invalid username or password';
+                    errorDiv.classList.add('show');
+                    return;
+                }
+                
+                const data = await response.json();
+                authToken = data.access_token;
+                currentUser = data.user;
+                
+                localStorage.setItem('authToken', authToken);
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                showApp();
+                loadUsers();
+            } catch (error) {
+                console.error('Login error:', error);
+            }
+        }
+        
+        function showApp() {
+            document.querySelector('.login-page').classList.remove('active');
+            document.querySelector('.app-main').classList.add('active');
+            
+            document.getElementById('headerDepartment').textContent = currentUser.department;
+            document.getElementById('headerUser').textContent = currentUser.full_name || currentUser.username;
+            document.getElementById('headerRole').textContent = currentUser.role.toUpperCase();
+            document.getElementById('dashboardRole').textContent = currentUser.role;
+            
+            // Hide user management if not admin
+            if (currentUser.role !== 'admin') {
+                document.getElementById('usersTab').style.display = 'none';
+            }
+        }
+        
+        function logout() {
+            authToken = null;
+            currentUser = null;
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+            
+            document.querySelector('.app-main').classList.remove('active');
+            document.querySelector('.login-page').classList.add('active');
+            document.getElementById('loginError').classList.remove('show');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+        
         function showSection(sectionId) {
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-            });
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
             
-            // Remove active class from all tabs
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Show selected section
             document.getElementById(sectionId).classList.add('active');
-            
-            // Add active class to clicked tab
             event.target.classList.add('active');
         }
         
-        function openAPI() {
-            window.open('/docs', '_blank');
-        }
-        
-        function copyCode() {
-            const code = `
-// Example: Fetch with Bearer Token
-const token = 'YOUR_ACCESS_TOKEN_HERE';
-const response = await fetch('http://localhost:8000/inventory/', {
-    headers: {
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json'
-    }
-});
-const data = await response.json();
-console.log(data);
-            `.trim();
+        async function handleCreateUser(event) {
+            event.preventDefault();
             
-            navigator.clipboard.writeText(code).then(() => {
-                alert('Code copied to clipboard!');
-            });
-        }
-        
-        // Mobile app detection
-        window.addEventListener('load', () => {
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-            const isAndroid = /Android/.test(navigator.userAgent);
+            const formData = {
+                username: document.getElementById('newUsername').value,
+                full_name: document.getElementById('newFullName').value,
+                password: document.getElementById('newPassword').value,
+                role: document.getElementById('newRole').value,
+                department: document.getElementById('newDepartment').value,
+                is_active: true
+            };
             
-            if (isIOS || isAndroid) {
-                document.body.style.paddingTop = '20px';
+            try {
+                const response = await fetch(`${API_BASE}/users/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    document.getElementById('userError').textContent = error.detail || 'Error creating user';
+                    document.getElementById('userError').classList.add('show');
+                    return;
+                }
+                
+                const successDiv = document.getElementById('userSuccess');
+                successDiv.textContent = `✓ User "${formData.username}" created successfully!`;
+                successDiv.style.display = 'block';
+                document.getElementById('userError').classList.remove('show');
+                
+                event.target.reset();
+                
+                setTimeout(() => {
+                    successDiv.style.display = 'none';
+                    loadUsers();
+                }, 2000);
+            } catch (error) {
+                console.error('Error:', error);
             }
-        });
+        }
+        
+        async function loadUsers() {
+            if (currentUser.role !== 'admin') return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/users/`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                if (!response.ok) return;
+                
+                const users = await response.json();
+                const usersList = document.getElementById('usersList');
+                
+                if (users.length === 0) {
+                    usersList.innerHTML = '<p style="padding: 20px; text-align: center; color: #999;">No users created yet</p>';
+                    return;
+                }
+                
+                usersList.innerHTML = users.map(user => `
+                    <div class="user-item">
+                        <div class="user-info">
+                            <div class="user-name">${user.full_name || user.username}</div>
+                            <div class="user-meta">
+                                <span class="user-badge role-badge">${user.role.toUpperCase()}</span>
+                                <span class="user-badge department-badge">${user.department}</span>
+                                <span class="user-meta">${user.is_active ? '✓ Active' : '✕ Inactive'}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading users:', error);
+            }
+        }
     </script>
 </body>
 </html>
