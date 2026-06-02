@@ -1,0 +1,106 @@
+/* Global Box Sizing */
+html {
+    box-sizing: border-box;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+:root {
+    --primary-color: #007bff;
+    --primary-hover: #0056b3;
+    --bg-color: #f4f4f4;
+    --text-color: #333;
+    --border-color: #ccc;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+h1, h2 {
+    color: #0056b3;
+    color: var(--primary-hover);
+}
+
+.module {
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fdfdfd;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+form input[type="text"],
+form input[type="number"],
+form input[type="date"],
+form textarea {
+    width: calc(100% - 22px);
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+
+form button {
+    background-color: #007bff;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+form button:hover {
+    background-color: var(--primary-hover);
+}
+form button:hover,
+form button:focus {
+    background-color: var(--primary-hover);
+    outline: none;
+}
+
+form button:focus {
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.5);
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    background-color: #e9ecef;
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.quotation-item {
+    border: 1px dashed #ccc;
+    border: 1px dashed var(--border-color);
+    padding: 10px;
+    margin-bottom: 10px;
+}
